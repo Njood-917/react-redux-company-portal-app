@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { companyAction } from '../features/companySlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
+
+
 
 export default function Company() {
   const url = 'https://api.github.com/organizations'
@@ -11,6 +13,7 @@ export default function Company() {
   const companies = useSelector((state: RootState) => state.company.companyList)
   const companyLoading = useSelector((state: RootState) => state.company.loading)
   const error = useSelector((state: RootState) => state.company.error)
+  const searchTerm = useSelector((state:RootState)=>state.company.SearchTerm)
 
   console.log(companies, 'companies')
   useEffect(() => {
@@ -27,6 +30,12 @@ export default function Company() {
 
     fetchData()
   }, [])
+
+  const handleSearch =(event:ChangeEvent<HTMLInputElement>)=>{
+    console.log(event.target.value);
+    
+
+  }
   if (error) {
     return <div> {error}</div>
   }
@@ -39,11 +48,15 @@ export default function Company() {
   }
   return (
     <div>
-      Company
+      Company app
+      <input type="text"  name='SearchById' 
+      placeholder='Search by id here ..' onChange={handleSearch}
+      value={searchTerm}/>
       {companies.map((company) => (
         <div>
           <h3>{company.id}</h3>
           <img src={company.avatar_url} />
+          
         </div>
       ))}
     </div>
