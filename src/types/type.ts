@@ -3,3 +3,9 @@ export type CompanyType ={
     id : number , 
     avatar_url:string ,
 }
+
+export type SearchCompanyAction ={
+    type:'companies/searchCompany';
+    payload:number,
+  
+}

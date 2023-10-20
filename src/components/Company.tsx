@@ -1,15 +1,16 @@
 import React, { ChangeEvent, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { companyAction } from '../features/companySlice'
+import { companyAction, searchCompany } from '../features/companySlice'
 import { useSelector } from 'react-redux'
-import { RootState } from '../store'
+import { RootState , AppDispatch } from '../store'
+
 
 
 
 export default function Company() {
   const url = 'https://api.github.com/organizations'
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>();
   const companies = useSelector((state: RootState) => state.company.companyList)
   const companyLoading = useSelector((state: RootState) => state.company.loading)
   const error = useSelector((state: RootState) => state.company.error)
@@ -31,11 +32,7 @@ export default function Company() {
     fetchData()
   }, [])
 
-  const handleSearch =(event:ChangeEvent<HTMLInputElement>)=>{
-    console.log(event.target.value);
-    
 
-  }
   if (error) {
     return <div> {error}</div>
   }
@@ -46,15 +43,26 @@ export default function Company() {
       </div>
     )
   }
+  const handleSearch =(event:ChangeEvent<HTMLInputElement>)=>{
+    dispatch(searchCompany(Number(event.target.value)));
+  }
+
+  //  search with searchTerm 
+  const filterdCompanies = searchTerm
+  ?companies.filter((company)=> company.id === searchTerm)
+  :companies;
   return (
     <div>
-      Company app
-      <input type="text"  name='SearchById' 
-      placeholder='Search by id here ..' onChange={handleSearch}
+      <h2>Company app</h2>
+      <input type="text" 
+       name='SearchById' 
+      placeholder='Search by id here ..'
+       onChange={handleSearch}
       value={searchTerm}/>
-      {companies.map((company) => (
-        <div>
+      {filterdCompanies.map((company) => (
+        <div key={company.id}>
           <h3>{company.id}</h3>
+          <h5>{company.login}</h5>
           <img src={company.avatar_url} />
           
         </div>

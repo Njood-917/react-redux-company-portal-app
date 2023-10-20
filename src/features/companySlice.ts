@@ -6,6 +6,7 @@ export type InitialState = {
   loading: boolean
   error: null | string
   SearchTerm:number,
+  login: string | null
 }
 
 const initialState: InitialState = {
@@ -13,12 +14,14 @@ const initialState: InitialState = {
   loading: true,
   error: null,
   SearchTerm:0,
+  login: null,
  
 }
 
+
 const companySlice = createSlice({
   name: 'companies',
-  initialState,
+  initialState:initialState,
   reducers: {
     getData: (state, action: PayloadAction<CompanyType[]>) => {
       state.companyList = action.payload
